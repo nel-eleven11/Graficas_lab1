@@ -1,4 +1,3 @@
-
 use crate::color::Color;
 
 pub struct Framebuffer {

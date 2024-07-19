@@ -1,20 +1,35 @@
 mod color;
 mod framebuffer;
+mod bmp;
 
-use color::Color;
+use framebuffer::Framebuffer;
 
 
 fn main() {
-    let color1 = Color::new(100, 150, 200);
-    let color2 = Color::new(50, 100, 150);
-    let color_hex = Color::from_hex(0x6496c8);
-    let color_sum = color1 + color2;
-    let color_mul = color1 * 1.5;
+    let mut framebuffer = Framebuffer::new(800, 600);
 
-    println!("Color 1: {}", color1);
-    println!("Color 2: {}", color2);
-    println!("Color from Hex: {}", color_hex);
-    println!("Sum: {}", color_sum);
-    println!("Mul: {}", color_mul);
+    framebuffer.set_background_color(0xADD8E6);
+    framebuffer.clear();
 
+    framebuffer.set_current_color(0xFF0000);
+    framebuffer.point(400, 300);
+    framebuffer.point(401, 300);
+    framebuffer.point(400, 301);
+    framebuffer.point(401, 301);
+
+    framebuffer.set_current_color(0x00FF00);
+    framebuffer.point(200, 150);
+    framebuffer.point(201, 150);
+    framebuffer.point(200, 151);
+    framebuffer.point(201, 151);
+
+    framebuffer.set_current_color(0x0000FF);
+    framebuffer.point(600, 450);
+    framebuffer.point(601, 450);
+    framebuffer.point(600, 451);
+    framebuffer.point(601, 451);
+
+    framebuffer.render_buffer("output.bmp")?;
+
+    println!("Framebuffer rendered to output.bmp");
 }
