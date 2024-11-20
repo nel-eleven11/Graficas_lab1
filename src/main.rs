@@ -18,13 +18,23 @@
      framebuffer.clear();
  
      // Set the current drawing color to black
-     framebuffer.set_current_color(0x000000);
+     framebuffer.set_current_color(0x002300);
  
      // Draw some lines using Bresenham's algorithm
      framebuffer.line(100, 100, 700, 500);
      framebuffer.line(700, 100, 100, 500);
      framebuffer.line(400, 50, 400, 550);
      framebuffer.line(50, 300, 750, 300);
+
+     let polygon_points = vec![
+        (100, 100),
+        (300, 50),
+        (500, 200),
+        (400, 400),
+        (200, 300),
+    ];
+
+    framebuffer.draw_polygon(&polygon_points);
  
      // Save the framebuffer as a BMP file
      let output_file = "lines.bmp";
