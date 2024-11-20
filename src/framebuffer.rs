@@ -82,8 +82,76 @@ impl Framebuffer {
                 points[i + 1]
             };
     
-            self.line(x1, y1, x2, y2);
+            self.line_clipped(x1, y1, x2, y2);
         }
     }
+
+    pub fn compute_outcode(x: isize, y: isize, x_min: isize, y_min: isize, x_max: isize, y_max: isize) -> u8 {
+        let mut code = 0;
+        if x < x_min {
+            code |= 1; // Izquierda
+        } else if x > x_max {
+            code |= 2; // Derecha
+        }
+        if y < y_min {
+            code |= 4; // Inferior
+        } else if y > y_max {
+            code |= 8; // Superior
+        }
+        code
+    }
+
+    pub fn line_clipped(&mut self, x1: usize, y1: usize, x2: usize, y2: usize) {
+        let (x_min, y_min, x_max, y_max) = (0, 0, self.width as isize - 1, self.height as isize - 1);
+    
+        let mut x1 = x1 as isize;
+        let mut y1 = y1 as isize;
+        let mut x2 = x2 as isize;
+        let mut y2 = y2 as isize;
+    
+        let mut outcode1 = Self::compute_outcode(x1, y1, x_min, y_min, x_max, y_max);
+        let mut outcode2 = Self::compute_outcode(x2, y2, x_min, y_min, x_max, y_max);
+    
+        while outcode1 != 0 || outcode2 != 0 {
+            if (outcode1 & outcode2) != 0 {
+                return; // Ambos puntos están completamente fuera de la pantalla en la misma región
+            }
+    
+            let outcode = if outcode1 != 0 { outcode1 } else { outcode2 };
+            let (x, y);
+    
+            if (outcode & 1) != 0 {
+                // Izquierda
+                x = x_min;
+                y = y1 + (y2 - y1) * (x_min - x1) / (x2 - x1);
+            } else if (outcode & 2) != 0 {
+                // Derecha
+                x = x_max;
+                y = y1 + (y2 - y1) * (x_max - x1) / (x2 - x1);
+            } else if (outcode & 4) != 0 {
+                // Inferior
+                y = y_min;
+                x = x1 + (x2 - x1) * (y_min - y1) / (y2 - y1);
+            } else {
+                // Superior
+                y = y_max;
+                x = x1 + (x2 - x1) * (y_max - y1) / (y2 - y1);
+            }
+    
+            if outcode == outcode1 {
+                x1 = x;
+                y1 = y;
+                outcode1 = Self::compute_outcode(x1, y1, x_min, y_min, x_max, y_max);
+            } else {
+                x2 = x;
+                y2 = y;
+                outcode2 = Self::compute_outcode(x2, y2, x_min, y_min, x_max, y_max);
+            }
+        }
+    
+        self.line(x1 as usize, y1 as usize, x2 as usize, y2 as usize);
+    }
+    
+    
     
 }

@@ -31,7 +31,7 @@
         (300, 50),
         (500, 200),
         (400, 400),
-        (200, 300),
+        (200, 3000),
     ];
 
     framebuffer.draw_polygon(&polygon_points);
