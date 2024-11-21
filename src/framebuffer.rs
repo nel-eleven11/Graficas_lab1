@@ -46,7 +46,5 @@ impl Framebuffer {
             None
         }
     }
-  
-
-    
+   
 }
