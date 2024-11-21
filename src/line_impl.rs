@@ -4,6 +4,7 @@ use nalgebra_glm::Vec3;
 
 pub trait Line {
     fn line(&mut self, start: Vec3, end: Vec3);
+    fn draw_polygon(&mut self, vertices: &[Vec3]);
 }
 
 impl Line for Framebuffer {
@@ -42,6 +43,25 @@ impl Line for Framebuffer {
                 err += dx;
                 y0 += sy;
             }
+        }
+    }
+
+    fn draw_polygon(&mut self, vertices: &[Vec3]) {
+        if vertices.len() < 3 {
+            // No se puede dibujar un polígono con menos de 3 vértices
+            return;
+        }
+
+        // Iterar sobre los vértices y dibujar líneas entre cada par consecutivo
+        for i in 0..vertices.len() {
+            let start = vertices[i];
+            let end = if i == vertices.len() - 1 {
+                vertices[0] // Conectar el último vértice con el primero
+            } else {
+                vertices[i + 1]
+            };
+
+            self.line(start, end);
         }
     }
 }

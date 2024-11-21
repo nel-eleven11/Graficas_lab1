@@ -22,9 +22,24 @@
         vec3(200.0, 300.0, 0.0),
     ];
 
+    let vertices2= vec![
+        vec3(200.0, 200.0, 0.0),
+        vec3(400.0, 150.0, 0.0),
+        vec3(200.0, 200.0, 0.0),
+        vec3(400.0, 100.0, 0.0),
+        vec3(250.0, 380.0, 0.0),
+    ];
+
     // Dibujar el polígono
-    framebuffer.set_current_color(0xFF0000); // Color rojo
+    framebuffer.set_background_color(0x0000FF); 
+    framebuffer.set_current_color(0xFF0000); 
     framebuffer.draw_polygon(&vertices);
+
+
+    framebuffer.set_background_color(0xFF00FF); 
+    framebuffer.set_current_color(0xFF5555); 
+    framebuffer.draw_polygon(&vertices2);
+
 
     // Guardar la imagen como BMP
     let output_file = "out.bmp";
