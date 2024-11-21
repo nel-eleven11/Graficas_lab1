@@ -16,6 +16,7 @@
     draw_polygon1(&mut framebuffer);
     draw_polygon2(&mut framebuffer);
     draw_polygon3(&mut framebuffer);
+    draw_polygon4_with_hole(&mut framebuffer);
 
     // Guardar la imagen como BMP
     let output_file = "out.bmp";
@@ -79,4 +80,55 @@ fn draw_polygon3(framebuffer: &mut Framebuffer) {
 
     // Dibujar el polígono
     framebuffer.draw_polygon(&vertices, border_color, fill_color);
+}
+
+fn draw_polygon4_with_hole(framebuffer: &mut Framebuffer) {
+    // Definir los vértices del Polígono 4
+    let vertices_polygon4 = vec![
+        vec3(413.0, 177.0, 0.0),
+        vec3(448.0, 159.0, 0.0),
+        vec3(502.0, 88.0, 0.0),
+        vec3(553.0, 53.0, 0.0),
+        vec3(535.0, 36.0, 0.0),
+        vec3(676.0, 37.0, 0.0),
+        vec3(660.0, 52.0, 0.0),
+        vec3(750.0, 145.0, 0.0),
+        vec3(761.0, 179.0, 0.0),
+        vec3(672.0, 192.0, 0.0),
+        vec3(659.0, 214.0, 0.0),
+        vec3(615.0, 214.0, 0.0),
+        vec3(632.0, 230.0, 0.0),
+        vec3(580.0, 230.0, 0.0),
+        vec3(597.0, 215.0, 0.0),
+        vec3(552.0, 214.0, 0.0),
+        vec3(517.0, 144.0, 0.0),
+        vec3(466.0, 180.0, 0.0),
+    ];
+
+    // Definir los vértices del Polígono 5 (agujero)
+    let vertices_polygon5 = vec![
+        vec3(682.0, 175.0, 0.0),
+        vec3(708.0, 120.0, 0.0),
+        vec3(735.0, 148.0, 0.0),
+        vec3(739.0, 170.0, 0.0),
+    ];
+
+    // Colores
+    let fill_color = 0x00FF00;   // Verde (Hex: RGB)
+    let border_color = 0xFFFFFF; // Blanco (Hex: RGB)
+    let background_color = 0x000000; // Negro para "borrar" el área del agujero
+
+    // Dibujar el Polígono 4 (relleno verde con borde blanco)
+    framebuffer.draw_polygon(&vertices_polygon4, border_color, fill_color);
+
+    // "Borrar" el área del Polígono 5 (relleno negro)
+    framebuffer.draw_polygon(&vertices_polygon5, background_color, background_color);
+
+    // Dibujar el contorno del Polígono 5 (borde blanco)
+    framebuffer.set_current_color(border_color);
+    for i in 0..vertices_polygon5.len() {
+        let start = vertices_polygon5[i];
+        let end = vertices_polygon5[(i + 1) % vertices_polygon5.len()];
+        framebuffer.line(start, end);
+    }
 }
