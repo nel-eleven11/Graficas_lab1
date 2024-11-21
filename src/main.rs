@@ -14,6 +14,7 @@
 
     // Dibujar el Polígono 1
     draw_polygon1(&mut framebuffer);
+    draw_polygon2(&mut framebuffer);
 
     // Guardar la imagen como BMP
     let output_file = "out.bmp";
@@ -39,8 +40,25 @@
     ];
 
     // Colores
-    let fill_color = 0x00FFFF;   // Amarillo (Hex: RGB)
-    let border_color = 0xFFFFFF; // Blanco (Hex: RGB)
+    let fill_color = 0x00FFFF;   
+    let border_color = 0xFFFFFF; 
+
+    // Dibujar el polígono
+    framebuffer.draw_polygon(&vertices, border_color, fill_color);
+}
+
+fn draw_polygon2(framebuffer: &mut Framebuffer) {
+    // Definir los vértices del Polígono 2
+    let vertices = vec![
+        vec3(321.0, 335.0, 0.0),
+        vec3(288.0, 286.0, 0.0),
+        vec3(339.0, 251.0, 0.0),
+        vec3(374.0, 302.0, 0.0),
+    ];
+
+    // Colores
+    let fill_color = 0xFF0000;   
+    let border_color = 0xFFFFFF; 
 
     // Dibujar el polígono
     framebuffer.draw_polygon(&vertices, border_color, fill_color);
